@@ -1,0 +1,176 @@
+1. nodejs 是一个让javascript 运行在服务器端的平台。
+2. nodejs 摒弃了依靠多线程实现高并发的涉及思路，采用单线程，异步IO，事件驱动的程序设计模型。
+3. 异步IO与事件驱动
+对于高并发的解决方案，传统的架构是多线程，为每个业务逻辑提供一个系统线程，通过线程切换来弥补同步IO的时间开销。 
+而nodejs采用单线程模型，对于所有IO都采用异步请求方式。nodejs在执行过程中会维护一个事件队列，程序在执行时进入事件循环等待下一事件到来，每个异步IO请求完成后会被推送到事件队列，等待程序进行处理。
+例如对于常见数据库查询，
+res = db.query("select * from table");   //线程阻塞，等待数据库返回结果
+res.output
+对于高并发的访问，一方面线程长期阻塞，另一方面为了应付新请求而不断增加线程，因此浪费大量系统资源，同时线程增加也占用大量cpu 时间来处理内存上下文切换。
+
+db.query("select * from table", function(res){
+	res.output();
+});
+执行 query 提供回调函数， 程序本身不会被阻塞。
+当数据库执行完毕，会将事件发送到事件队列，等到线程进入事件循环，调用之前的回调函数。
+
+4. nodejs的异步机制都是基于事件的，所有的磁盘，网络，数据库操作都是以非阻塞方式请求，，返回结果由事件循环来处理。
+nodejs进程在同一时刻只会处理一个事件，完成后立即进入事件循环检查处理后续事件。
+
+5. nodejs/npm/n
+  npm 是nodejs 的package management， n 是 nodejs 多版本控制的工具。
+
+6. 异步IO与事件式编程
+nodejs的最大特点就是异步IO与事件紧密结合的编程模式，与传统的同步式IO线性编程思路有很大不同，控制流很大程度上要靠事件和回调函数来组织，一个逻辑要拆分为若干个单元。
+
+7. 阻塞与线程
+  线程在执行中如果遇到磁盘读写等IO操作要耗费较长时间，这时候操作系统会剥夺线程的CPU控制权，使其暂停，把资源让给其他线程。 当IO操作完毕，操作系统解除线程阻塞状态， 恢复其对CPU的控制权， 是为同步IO，阻塞式IO
+  异步IO指线程遇到IO操作时，不会阻塞等待，而是将IO操作交给操作系统，然后继续执行后续命令。 当操作系统完成IO操作，以事件形式通知执行IO操作的线程，线程则会在特定时候处理这个事件， 因此线程必须有事件循环，不断检查有没有未处理的事件。
+
+  阻塞模式下，一个线程只能处理一项任务，要提高吞吐量则必须通过多线程。而非阻塞模式下，一个线程永远都在执行计算操作，线程所使用CPU核心利用率识1005， 省却了CPU进行线程调度的操作。
+
+8. 事件
+nodejs所有异步操作在完成时会发送一个事件到事件队列，在开发者看来，事件由 EventEmitter 提供。
+nodejs 程序从开始到结束，所有的逻辑都是事件的回调函数，事件的回调函数执行过程中，可能会发出IO操作或者触发事件，执行完毕后再返回事件循环， 事件循环会再次检查队列中有没有未处理的事件，直到程序结束。
+
+9. 模块和包
+ 模块和包是一一对应的， 一个nodejs文件就是一个模块，这个文件可以是 javascript， JSON或者c/c++扩展。
+ nodejs 提供exports 和 require对象提供接口，获取其它模块的接口。
+
+//module.js
+var name;
+exports.setName = function(theName) {
+  name = theName;
+};
+
+exports.sayHello = function(){
+  console.log("hello world " + name);
+};
+
+
+//getmodule.js
+
+var mymodule1 = require("./module");
+mymodule1.setName("stanley");
+mymodule1.sayHello();
+
+var mymodule2 = require("./module");
+mymodule2.setName("stanley 22");
+mymodule2.sayHello();
+mymodule1.sayhello();
+
+//require 是当次加载
+
+10. module.exports = Hello  <==> exports.Hello = Hello
+有时候我们想把一个对象封装到模块中，例如
+//singleobject.js
+
+function Hello(){
+	var name;
+	this.setName = function(dname) {
+	  name = dname;
+	};
+
+	this.sayHello = function() {
+	  console.log("xxxxx");
+	};
+};
+
+exports.Hello = Hello
+
+require('./singleobject').Hello 来获取对象 Hello
+我们可以用简化办法来实现
+function Hello(){
+	var name;
+	this.setName = function(dname) {
+	  name = dname;
+	};
+
+	this.sayHello = function() {
+	  console.log("xxxxx");
+	};
+};
+
+module.exports = Hello
+
+模块的 exports 是一个普通的空对象 {}, 专门用来声明接口， 本质上是通过它为模块闭包的内部建立了一个有限的访问接口， 因为它没有任何特殊地方，因此可以用任何东西代替。
+
+exports = module.exports = {}
+require('a.js') == a.exports
+
+11.包是在模块基础上更深一步的抽象。
+nodejs的包是一个目录，其中包含一个JSON文件 package.json
+package.json
+bin    // binary files
+lib    // javascript files
+doc   //documents
+test  // test files
+
+a) 最简单的包就是一个作为文件夹的模块。
+//somepackage/index.js
+export.hello = function(){
+	console.log("hello");
+};
+
+var sp = require('./somepackage')
+sp.hello(); 
+
+//the file name must be index.js
+
+b) 通过 package.json 定义一个复杂的包
+{
+	"main" : "./lib/xxx.js",  // 如果package.json 或者main 字段不存在，会尝试寻找 index.js 或者 index.node作为包的接口
+    "version" : "1.9.0",
+    "dependencies" : {
+      "webkit" : "1.2"
+    }
+} 
+
+12. nodejs 包管理器  npm
+   npm install express
+   npm 默认会从 http://npmjs.org 下载包，安装到当前目录的 node_modules 目录下
+   a) 本地模式:默认，安装到当前目录
+   b) 全局模式: npm install -g xx 
+
+   本地模式不会注册PATH 环境变量，会导致安装的程序不能直接命令行运行。 
+   全局模式的包不能直接用 require 获得，因为它不会搜索系统安装目录的 node_modules目录
+
+   npm link 在本地，全局包之间创建符号链接。 (ls -ln ?)
+
+13. npm 发布包
+	npm init 创建符合标准的package.json
+	npm publish 发布包
+	npm unpublish 取消发布包
+
+	npm adduser 创建user
+	npm whoami  测试账号
+
+13. nodesjs中我们需要把复杂的操作进行拆分。
+  process.nextTick(callback) 为事件循环添加一项任务，nodejs在下次事件循环中调用callback函数。
+
+14. events是nodejs中最重要的模块。
+	events模块只提供一个对象 events.EventEmitter， 提供事件发射与事件监听器功能的封装。 每个事件由一个事件名和若干参数组成。 对于每个事件， EventEmitter 支持若干个事件监听器， 当事件发射时，注册的监听器依次被调用。
+
+	EventEmitter 定义了一个特殊的事件error， 包含错误的语义， 我们在碰到异常会发射error事件。
+	如果EventEmitter没有注册监听器， nodejs会退出程序并打印调用栈。
+
+15. 模块加载机制
+	核心模块总是拥有最高的加载优先权。
+	文件模块是存储为单独文件或者文件夹的模块， 可能是javascrpt 代码， json或者编译好的cpp代码。在不显式制定文件模块扩展名的时候， nodejs会试图加上 .js, .json, .node
+	如果require参数不以相对路径开头，而该模块又不是核心模块，则nodejs要查找node_modules目录进行加载。
+	层层往上进行递归。
+
+	nodejs不会重复加载，也就是说会被缓存。 nodejs 根据文件名进行缓存的。
+
+16. nodejs 控制流
+
+
+17. nodejs 提供http模块，其中封装了一个高效http服务器和一个简易 http客户端。 http.Server 是一个基于事件的 http 服务器，核心由nodejs下层c++实现， javascript 封装接口。
+http.request 是一个http客户端工具，用于向服务器发起请求。
+
+	Server继承EventEmitter，提供几个事件
+	request 客户端请求到来， 参数 req， res
+	connection TCP连接建立， 参数 socket
+	close 服务器关闭
+
+18. nodejs的web开发框架   express
