@@ -107,7 +107,7 @@ jobs:
     etcd_metrics_server:
       nats:
         machines: [10.0.16.103]
-        password: PASSWORD
+        [YOUR PASSWORD]: [YOUR PASSWORD]
         username: nats
 
 - name: nfs_z1
@@ -161,7 +161,7 @@ jobs:
       - name: api
         port: 9022
         uris:
-        - "api.eng30.servicemax.io"
+        - "api.[Your Domain]"
 
 - name: ha_proxy_z1
   instances: 1
@@ -227,7 +227,7 @@ jobs:
       - name: hm9000
         port: 5155
         uris:
-        - "hm9000.eng30.servicemax.io"
+        - "hm9000.[Your Domain]"
 
 - name: doppler_z1
   instances: 1
@@ -239,7 +239,7 @@ jobs:
   properties:
     doppler: {zone: z1}
     doppler_endpoint:
-      shared_secret: PASSWORD
+      shared_secret: [YOUR PASSWORD]
 
 - name: loggregator_trafficcontroller_z1
   instances: 1
@@ -257,11 +257,11 @@ jobs:
       - name: doppler
         port: 8081
         uris:
-        - "doppler.eng30.servicemax.io"
+        - "doppler.[Your Domain]"
       - name: loggregator
         port: 8080
         uris:
-          - "loggregator.eng30.servicemax.io"
+          - "loggregator.[Your Domain]"
 
 - name: uaa_z1
   instances: 1
@@ -285,22 +285,22 @@ jobs:
       - name: uaa
         port: 8080
         uris:
-        - "uaa.eng30.servicemax.io"
-        - "*.uaa.eng30.servicemax.io"
-        - "login.eng30.servicemax.io"
-        - "*.login.eng30.servicemax.io"
+        - "uaa.[Your Domain]"
+        - "*.uaa.[Your Domain]"
+        - "login.[Your Domain]"
+        - "*.login.[Your Domain]"
     uaa:
       admin:
-        client_secret: PASSWORD
+        client_secret: [YOUR PASSWORD]
       batch:
-        password: PASSWORD
+        [YOUR PASSWORD]: [YOUR PASSWORD]
         username: batch_user
       cc:
-        client_secret: PASSWORD
+        client_secret: [YOUR PASSWORD]
       scim:
         userids_enabled: true
         users:
-        - admin|PASSWORD|scim.write,scim.read,openid,cloud_controller.admin,doppler.firehose,routing.router_groups.read
+        - admin|[YOUR PASSWORD]|scim.write,scim.read,openid,cloud_controller.admin,doppler.firehose,routing.router_groups.read
     uaadb:
       address: 10.0.16.101
       databases:
@@ -308,7 +308,7 @@ jobs:
       db_scheme: postgresql
       port: 5524
       roles:
-      - {name: uaaadmin, password: PASSWORD, tag: admin}
+      - {name: uaaadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
 
 - name: router_z1
   instances: 1
@@ -341,11 +341,11 @@ jobs:
 
 properties:
   networks: {apps: cf_private}
-  app_domains: [eng30.servicemax.io]
+  app_domains: [[Your Domain]]
   cc:
     allow_app_ssh_access: false
-    bulk_api_password: PASSWORD
-    db_encryption_key: PASSWORD
+    bulk_api_[YOUR PASSWORD]: [YOUR PASSWORD]
+    db_encryption_key: [YOUR PASSWORD]
     default_running_security_groups: [public_networks, dns]
     default_staging_security_groups: [public_networks, dns]
     install_buildpacks:
@@ -357,7 +357,7 @@ properties:
     - {name: php_buildpack, package: buildpack_php}
     - {name: staticfile_buildpack, package: buildpack_staticfile}
     - {name: binary_buildpack, package: buildpack_binary}
-    internal_api_password: PASSWORD
+    internal_api_[YOUR PASSWORD]: [YOUR PASSWORD]
     quota_definitions:
       default:
         memory_limit: 102400
@@ -376,8 +376,8 @@ properties:
       rules:
       - {destination: 0.0.0.0/0, ports: '53', protocol: tcp}
       - {destination: 0.0.0.0/0, ports: '53', protocol: udp}
-    srv_api_uri: https://api.eng30.servicemax.io
-    staging_upload_password: PASSWORD
+    srv_api_uri: https://api.[Your Domain]
+    staging_upload_[YOUR PASSWORD]: [YOUR PASSWORD]
     staging_upload_user: staging_upload_user
   ccdb:
     address: 10.0.16.101
@@ -386,27 +386,27 @@ properties:
     db_scheme: postgres
     port: 5524
     roles:
-    - {name: ccadmin, password: PASSWORD, tag: admin}
+    - {name: ccadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
   databases:
     databases:
     - {name: ccdb, tag: cc, citext: true}
     - {name: uaadb, tag: uaa, citext: true}
     port: 5524
     roles:
-    - {name: ccadmin, password: PASSWORD, tag: admin}
-    - {name: uaaadmin, password: PASSWORD, tag: admin}
+    - {name: ccadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
+    - {name: uaaadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
   dea_next:
     advertise_interval_in_seconds: 5
     heartbeat_interval_in_seconds: 10
     memory_mb: 33996
   description: Cloud Foundry sponsored by Pivotal
-  domain: eng30.servicemax.io
+  domain: [Your Domain]
   etcd:
     machines: [10.0.16.104]
     peer_require_ssl: false
     require_ssl: false
   hm9000:
-    url: https://hm9000.eng30.servicemax.io
+    url: https://hm9000.[Your Domain]
     port: 5155
   logger_endpoint:
     port: 4443
@@ -414,15 +414,15 @@ properties:
     etcd:
       machines: [10.0.16.104]
   loggregator_endpoint:
-    shared_secret: PASSWORD
+    shared_secret: [YOUR PASSWORD]
   metron_agent:
     zone: z1
     deployment: minimal-aws
   metron_endpoint:
-    shared_secret: PASSWORD
+    shared_secret: [YOUR PASSWORD]
   nats:
     machines: [10.0.16.103]
-    password: PASSWORD
+    [YOUR PASSWORD]: [YOUR PASSWORD]
     port: 4222
     user: nats
   nfs_server:
@@ -430,7 +430,7 @@ properties:
     allow_from_entries: [10.0.16.0/24]
   ssl:
     skip_cert_verify: true
-  system_domain: eng30.servicemax.io
+  system_domain: [Your Domain]
   system_domain_organization: default_organization
   uaa:
     clients:
@@ -438,43 +438,43 @@ properties:
         authorities: clients.read,clients.write,clients.admin
         authorized-grant-types: client_credentials
         scope: openid,cloud_controller_service_permissions.read
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
       cloud_controller_username_lookup:
         authorities: scim.userids
         authorized-grant-types: client_credentials
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
       cc_routing:
         authorities: routing.router_groups.read
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
         authorized-grant-types: client_credentials
       gorouter:
         authorities: routing.routes.read
         authorized-grant-types: client_credentials,refresh_token
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
       tcp_emitter:
         authorities: routing.routes.write,routing.routes.read
         authorized-grant-types: client_credentials,refresh_token
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
       tcp_router:
         authorities: routing.routes.read
         authorized-grant-types: client_credentials,refresh_token
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
       doppler:
         authorities: uaa.resource
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
       login:
-        authorities: oauth.login,scim.write,clients.read,notifications.write,critical_notifications.write,emails.write,scim.userids,password.write
+        authorities: oauth.login,scim.write,clients.read,notifications.write,critical_notifications.write,emails.write,scim.userids,[YOUR PASSWORD].write
         authorized-grant-types: authorization_code,client_credentials,refresh_token
-        redirect-uri: https://login.eng30.servicemax.io
+        redirect-uri: https://login.[Your Domain]
         scope: openid,oauth.approvals
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
       servicesmgmt:
         authorities: uaa.resource,oauth.service,clients.read,clients.write,clients.secret
-        authorized-grant-types: authorization_code,client_credentials,password,implicit
+        authorized-grant-types: authorization_code,client_credentials,[YOUR PASSWORD],implicit
         autoapprove: true
-        redirect-uri: https://servicesmgmt.eng30.servicemax.io/auth/cloudfoundry/callback
+        redirect-uri: https://servicesmgmt.[Your Domain]/auth/cloudfoundry/callback
         scope: openid,cloud_controller.read,cloud_controller.write
-        secret: PASSWORD
+        secret: [YOUR PASSWORD]
     jwt:
       signing_key: |
         -----BEGIN RSA PRIVATE KEY-----
@@ -503,7 +503,7 @@ properties:
 
     ssl:
       port: -1
-    url: https://uaa.eng30.servicemax.io
+    url: https://uaa.[Your Domain]
   consul:
     agent:
       log_level: null
