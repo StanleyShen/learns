@@ -583,6 +583,13 @@ properties:
   system_domain_organization: default_organization
   uaa:
     clients:
+      ssh-proxy:
+        authorized-grant-types: authorization_code
+        autoapprove: true
+        override: true
+        redirect-uri: /login
+        scope: openid,cloud_controller.read,cloud_controller.write
+        secret: [YOUR PASSWORD]
       cc-service-dashboards:
         authorities: clients.read,clients.write,clients.admin
         authorized-grant-types: client_credentials
@@ -1855,7 +1862,7 @@ properties:
         -----END RSA PRIVATE KEY-----
       servers:
       - 10.0.16.106
-      uaa_secret: null
+      uaa_secret: [YOUR PASSWORD]
       uaa_token_url: https://uaa.[Your Domain]/oauth/token
     ssl:
       skip_cert_verify: true
