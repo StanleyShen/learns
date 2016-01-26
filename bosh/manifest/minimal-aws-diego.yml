@@ -1,5 +1,4 @@
 # The following line helps maintain current documentation at http://docs.cloudfoundry.org.
-# code_snippet cf-minimal-aws start
 ---
 name: cf
 director_uuid: d23783bb-ee0a-4744-8685-03ded5ad79ed
@@ -110,7 +109,7 @@ jobs:
     etcd_metrics_server:
       nats:
         machines: [10.0.16.103]
-        [YOUR PASSWORD]: [YOUR PASSWORD]
+        password: [YOUR PASSWORD]
         username: nats
 
 - name: nfs_z1
@@ -296,7 +295,7 @@ jobs:
       admin:
         client_secret: [YOUR PASSWORD]
       batch:
-        [YOUR PASSWORD]: [YOUR PASSWORD]
+        password: [YOUR PASSWORD]
         username: batch_user
       cc:
         client_secret: [YOUR PASSWORD]
@@ -311,7 +310,7 @@ jobs:
       db_scheme: postgresql
       port: 5524
       roles:
-      - {name: uaaadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
+      - {name: uaaadmin, password: [YOUR PASSWORD], tag: admin}
 
 - name: router_z1
   instances: 1
@@ -498,7 +497,7 @@ properties:
   app_domains: [[Your Domain]]
   cc:
     allow_app_ssh_access: false
-    bulk_api_[YOUR PASSWORD]: [YOUR PASSWORD]
+    bulk_api_password: [YOUR PASSWORD]
     db_encryption_key: [YOUR PASSWORD]
     default_running_security_groups: [public_networks, dns]
     default_staging_security_groups: [public_networks, dns]
@@ -511,7 +510,7 @@ properties:
     - {name: php_buildpack, package: buildpack_php}
     - {name: staticfile_buildpack, package: buildpack_staticfile}
     - {name: binary_buildpack, package: buildpack_binary}
-    internal_api_[YOUR PASSWORD]: [YOUR PASSWORD]
+    internal_api_password: [YOUR PASSWORD]
     quota_definitions:
       default:
         memory_limit: 102400
@@ -531,7 +530,7 @@ properties:
       - {destination: 0.0.0.0/0, ports: '53', protocol: tcp}
       - {destination: 0.0.0.0/0, ports: '53', protocol: udp}
     srv_api_uri: https://api.[Your Domain]
-    staging_upload_[YOUR PASSWORD]: [YOUR PASSWORD]
+    staging_upload_password: [YOUR PASSWORD]
     staging_upload_user: staging_upload_user
   ccdb:
     address: 10.0.16.101
@@ -540,15 +539,15 @@ properties:
     db_scheme: postgres
     port: 5524
     roles:
-    - {name: ccadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
+    - {name: ccadmin, password: [YOUR PASSWORD], tag: admin}
   databases:
     databases:
     - {name: ccdb, tag: cc, citext: true}
     - {name: uaadb, tag: uaa, citext: true}
     port: 5524
     roles:
-    - {name: ccadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
-    - {name: uaaadmin, [YOUR PASSWORD]: [YOUR PASSWORD], tag: admin}
+    - {name: ccadmin, password: [YOUR PASSWORD], tag: admin}
+    - {name: uaaadmin, password: [YOUR PASSWORD], tag: admin}
   dea_next:
     advertise_interval_in_seconds: 5
     heartbeat_interval_in_seconds: 10
@@ -572,7 +571,7 @@ properties:
     shared_secret: [YOUR PASSWORD]
   nats:
     machines: [10.0.16.103]
-    [YOUR PASSWORD]: [YOUR PASSWORD]
+    password: [YOUR PASSWORD]
     port: 4222
     user: nats
   nfs_server:
@@ -1343,8 +1342,8 @@ properties:
     cc_uploader:
       cc:
         base_url: https://api.[Your Domain]
-        basic_auth_[YOUR PASSWORD]: [YOUR PASSWORD]
-        staging_upload_[YOUR PASSWORD]: [YOUR PASSWORD]
+        basic_auth_password: [YOUR PASSWORD]
+        staging_upload_password: [YOUR PASSWORD]
         staging_upload_user: staging_upload_user
       log_level: null
     converger:
@@ -1540,8 +1539,8 @@ properties:
         require_ssl: false
       cc:
         base_url: https://api.[Your Domain]
-        basic_auth_[YOUR PASSWORD]: [YOUR PASSWORD]
-        staging_upload_[YOUR PASSWORD]: [YOUR PASSWORD]
+        basic_auth_password: [YOUR PASSWORD]
+        staging_upload_password: [YOUR PASSWORD]
         staging_upload_user: staging_upload_user
       log_level: debug
     rep:
@@ -1730,7 +1729,7 @@ properties:
       nats:
         machines:
         - 10.0.16.103
-        [YOUR PASSWORD]: [YOUR PASSWORD]
+        password: [YOUR PASSWORD]
         port: 4222
         user: nats
     ssh_proxy:
@@ -1952,8 +1951,8 @@ properties:
         require_ssl: false
       cc:
         base_url: https://api.[Your Domain]
-        basic_auth_[YOUR PASSWORD]: [YOUR PASSWORD]
-        staging_upload_[YOUR PASSWORD]: [YOUR PASSWORD]
+        basic_auth_password: [YOUR PASSWORD]
+        staging_upload_password: [YOUR PASSWORD]
         staging_upload_user: staging_upload_user
       insecure_docker_registry_list: null
       log_level: null
@@ -2049,8 +2048,8 @@ properties:
         require_ssl: false
       cc:
         base_url: https://api.[Your Domain]
-        basic_auth_[YOUR PASSWORD]: [YOUR PASSWORD]
-        staging_upload_[YOUR PASSWORD]: [YOUR PASSWORD]
+        basic_auth_password: [YOUR PASSWORD]
+        staging_upload_password: [YOUR PASSWORD]
         staging_upload_user: staging_upload_user
       log_level: null
       traffic_controller_url: wss://doppler.[Your Domain]:443
