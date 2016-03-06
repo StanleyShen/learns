@@ -56,3 +56,22 @@ Loggregator is composed of:
 - Doppler: Responsible for gathering logs from the Metron agents, storing them in temporary buffers, and forwarding logs to 3rd party syslog drains.
 - Traffic Controller: Handles client requests for logs. Gathers and collates messages from all Doppler servers, and provides external API and message translation (as needed for legacy APIs).
 
+
+statsd-injector
+====================================
+Companion component to Metron that receives Statsd and emits Dropsonde to Metron
+[https://github.com/cloudfoundry/statsd-injector](https://github.com/cloudfoundry/statsd-injector)
+
+
+
+Routing API Server
+=====================
+The purpose of the Routing API is to present a RESTful interface for registering and deregistering routes for both internal and external clients. This allows easier consumption by different clients as well as the ability to register routes from outside of the CF deployment.
+[https://github.com/cloudfoundry-incubator/routing-api](https://github.com/cloudfoundry-incubator/routing-api)
+
+
+route-registrar
+=====================
+A standalone executable written in golang that continuously broadcasts a route using NATS to the CF router.
+[https://github.com/cloudfoundry-incubator/route-registrar](https://github.com/cloudfoundry-incubator/route-registrar)
+
