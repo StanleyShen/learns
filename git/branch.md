@@ -167,3 +167,6 @@ $ git checkout master
 $ git merge server
 ```
 ![](https://github.com/StanleyShen/learns/raw/master/git/images/git-rebase-08.png)
+
+
+#####The Perils of Rebasing
